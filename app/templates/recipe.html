@@ -1,0 +1,35 @@
+
+<body>
+	<a href="{{ url_for('index') }}"><button>Home</button></a>
+	{% if recipe %}
+		<div class="recipe-img">
+			<img src="{{ recipe['image'] }}" height="200", width="300" align="top">
+		</div>
+
+		<div class="recipe-title">
+			<b>{{ recipe['title'] }}</b>
+		</div>
+		<br>
+		<div class="recipe-ingredients">
+			<b>Ingredients</b>
+			<ul>
+				{% for ing in recipe['ingredients'] %}
+				<li>{{ ing }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="recipe-instructions">
+			<b>Instructions</b>
+			<ul>
+				{% for instr in recipe['instructions'] %}
+				<li>{{ instr }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% else %}
+	<div class="error-display">
+		<h2>This website has not been implemented yet.</h2>
+	</div>
+	{% endif %}
+</body>

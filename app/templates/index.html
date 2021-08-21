@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>What's for dinner?</h1>
+<div>
+	<b>Enter a url for a recipe</b>
+	<form action="{{ url_for('index') }}" method="post">
+		{{ form.csrf_token }}
+		<fieldset class="form-field">
+				{{ form.field.label }}
+				{{ form.field }}
+		</fieldset>
+
+	{{ form.submit }}
+	</form>
+</div>
+<a href="{{ url_for('testing') }}"><button type="button" name="test-button">Test Page</button></a>
+{% endblock %}
