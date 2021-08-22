@@ -34,10 +34,3 @@ def recipe():
 		db.session.add(recipe)
 		db.session.commit()
 	return render_template('recipe.html', recipe=recipe_dict)
-
-
-@app.route('/testing')
-def testing():
-	"Test route for checking db connection"
-	rows = models.GODT.query.filter_by(year=2012)
-	return render_template('test.html', rows=rows)

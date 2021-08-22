@@ -24,13 +24,3 @@ class Recipes(db.Model):
 	host = db.Column(db.String())
 	url = db.Column(db.String(), nullable=False)
 	
-
-class GODT(db.Model):
-	"Test table for country data"
-	__tablename__ = "godt"
-	__table_args__ = {"schema": "public"}
-	id = db.Column(db.Integer(), nullable=False, primary_key=True)
-	country = db.Column(db.String(100), nullable=False)
-	year = db.Column(db.Integer(), nullable=False)
-	population = db.Column(db.Float(), nullable=False)
-	donations = db.Column(db.Integer(), nullable=False)
