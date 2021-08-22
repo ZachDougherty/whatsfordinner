@@ -23,4 +23,12 @@ class Recipes(db.Model):
 	image = db.Column(db.String())
 	host = db.Column(db.String())
 	url = db.Column(db.String(), nullable=False)
-	
+
+class Users(db.Model):
+	"Table for users"
+	__tablename__ = "users"
+	__table_args__ = {"schema": "public"}
+
+	id = db.Column(db.Integer(), nullable=False)
+	username = db.Column(db.String(20), nullable=False, primary_key=True)
+	password = db.Column(db.String(20), nullable=False)
