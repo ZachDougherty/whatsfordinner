@@ -1,5 +1,11 @@
 # !/usr/local/bin/zsh zsh
 
+# create the log directory if it doesn't already exist
+if [ ! -d "./logs" ]; then
+  mkdir logs
+  echo "Created ./logs directory."
+fi
+
 # https://dev.to/meleu/how-to-join-array-elements-in-a-bash-script-303a
 joinByChar() {
   local IFS="_"
