@@ -24,10 +24,3 @@ def get_recipe(url: str):
 		return str(e)
 
 	return recipe
-
-if __name__ == '__main__':
-	import ipdb; ipdb.set_trace()
-
-	example = get_recipe("https://www.foodandwine.com/comfort-food/best-taco-recipes?slide=06864ec1-e0cf-443d-8ab1-d6a3d5936691#06864ec1-e0cf-443d-8ab1-d6a3d5936691")
-	x = True
-	ipdb.set_trace()
