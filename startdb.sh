@@ -7,4 +7,11 @@ joinByChar() {
 }
 
 export fname=$(joinByChar logfile $(date))
-pg_ctl start -l logs/$fname -D /usr/local/var/postgres
+
+if [ "$#" -eq 1 ]; then
+  export db=$1
+else
+  export db=/usr/local/var/postgres
+fi
+
+pg_ctl start -l logs/$fname -D $db
