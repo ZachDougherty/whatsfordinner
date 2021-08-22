@@ -16,21 +16,15 @@ def index():
 @app.route('/recipe', methods=['POST','GET'])
 def recipe():
 	"Display recipe information."
-	"""
-	Need to improve the flow of this function.
-	Trying to catch errors by type checking the
-	output of a function is clunky and
-	confusing, I need to refactor this.
-	"""
 	url = request.args.get('url')
-	response = get_recipe(url)
-	if isinstance(response, str):
+	try:
+		recipe = models.Recipes.query.filter_by(url=url).first()
+		recipe_dict = get_recipe(url)
+		if not recipe:
+			recipe = models.Recipes(**recipe_dict)
+			db.session.add(recipe)
+			db.session.commit()
+	except:  # if website is not implemented by recipe_scrapers or url is bad
 		recipe_dict = None
-	else:
-		recipe_dict = response
-	recipe = models.Recipes.query.filter_by(url=url).first()
-	if recipe_dict is not None and not recipe:
-		recipe = models.Recipes(**recipe_dict)
-		db.session.add(recipe)
-		db.session.commit()
-	return render_template('recipe.html', recipe=recipe_dict)
+	finally:
+		return render_template('recipe.html', recipe=recipe_dict)
