@@ -24,7 +24,7 @@ pg_ctl start -l logs/$fname -D $db
 
 # hostname:port:database:username:password
 if [ "$#" -eq 2 ]; then
-  if [ ! -f "~./.pgpass" ]; then
+  if [ ! -f "~/.pgpass" ]; then
     touch ~/.pgpass
     chmod 0600 ~/.pgpass
     echo $2 > ~/.pgpass
