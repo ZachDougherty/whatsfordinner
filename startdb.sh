@@ -14,10 +14,22 @@ joinByChar() {
 
 export fname=$(joinByChar logfile $(date))
 
-if [ "$#" -eq 1 ]; then
+if [ "$#" -ge 1 ]; then
   export db=$1
 else
   export db=/usr/local/var/postgres
 fi
 
 pg_ctl start -l logs/$fname -D $db
+
+# hostname:port:database:username:password
+if [ "$#" -eq 2 ]; then
+  if [ ! -f "~./.pgpass" ]; then
+    touch ~/.pgpass
+    chmod 0600 ~/.pgpass
+    echo $2 > ~/.pgpass
+    echo "Created ~/.pgpass"
+  fi
+  psql -d $(echo $2 | cut -f 3 -d ':') -f ./database/create_tables.sql
+  echo "Created tables."
+fi
