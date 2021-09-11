@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }} Try logging in <a href="{{ url_for('login') }}">
+           <button name="login-button">Login</button>
+         </a>
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+<h2>Register</h2>
+<a href="{{ url_for('index') }}"><button name="home-button">Home</button></a>
+<div class="register">
+  <form class="register-form" method="post">
+    {{ form.csrf_token }}
+    <div class="username">
+      {{ form.username.label }}
+      {{ form.username }}
+    </div>
+    <div class="password">
+      {{ form.password.label }}
+      {{ form.password }}
+    </div>
+    <div class="submit">
+      {{ form.submit }}
+    </div>
+  </form>
+</div>
+{% endblock %}

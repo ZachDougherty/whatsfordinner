@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+<h2>Login</h2>
+<a href="{{ url_for('index') }}"><button name="home-button">Home</button></a>
+<div class="register">
+  <form class="register-form" method="post">
+    {{ form.csrf_token }}
+    <div class="username">
+      {{ form.username.label }}
+      {{ form.username }}
+    </div>
+    <div class="password">
+      {{ form.password.label }}
+      {{ form.password }}
+    </div>
+    <div class="submit">
+      {{ form.submit }}
+    </div>
+  </form>
+</div>
+{% endblock %}

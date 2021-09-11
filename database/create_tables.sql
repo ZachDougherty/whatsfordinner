@@ -17,8 +17,8 @@ CREATE TABLE recipes (
 CREATE TABLE users (
   id SERIAL,
   username VARCHAR(20) NOT NULL,
-  password VARCHAR(20) NOT NULL,
-  PRIMARY KEY (username)
+  password_hash VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id)
 )
 ;
 COMMIT;

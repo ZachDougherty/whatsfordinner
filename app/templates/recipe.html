@@ -1,6 +1,9 @@
 
+{% extends 'base.html' %}
+{% block title %}Recipe{% endblock %}
+{% block content %}
 <body>
-	<a href="{{ url_for('index') }}"><button>Home</button></a>
+	<a href="{{ url_for('index') }}"><button class="home-button">Home</button></a>
 	{% if recipe %}
 		<div class="recipe-img">
 			<img src="{{ recipe['image'] }}" height="200", width="300" align="top">
@@ -33,3 +36,4 @@
 	</div>
 	{% endif %}
 </body>
+{% endblock %}

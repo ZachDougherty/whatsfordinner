@@ -1,14 +1,35 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from flask_login import UserMixin
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Length
 
-from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
+from app import db, login_manager
+
+# WTF Forms
 class StringForm(FlaskForm):
 	"Class for single string field form"
 	field = StringField('url', validators=[DataRequired()])
 	submit = SubmitField('submit')
 
+class LoginForm(FlaskForm):
+	"Login Form"
+	username = StringField('username', validators=[DataRequired()])
+	password = PasswordField('password', validators=[DataRequired()])
+	submit = SubmitField('submit')
+
+class RegisterForm(FlaskForm):
+	username = StringField('username', validators=[
+		DataRequired(), Length(min=4)
+	])
+	password = PasswordField('password', validators=[
+		DataRequired(), Length(min=8)
+	])
+	submit = SubmitField('submit')
+
+
+# Table <> Class definitions
 class Recipes(db.Model):
 	"Table for recipes"
 	__tablename__ = "recipes"
@@ -24,11 +45,25 @@ class Recipes(db.Model):
 	host = db.Column(db.String())
 	url = db.Column(db.String(), nullable=False)
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
 	"Table for users"
 	__tablename__ = "users"
 	__table_args__ = {"schema": "public"}
 
-	id = db.Column(db.Integer(), nullable=False)
-	username = db.Column(db.String(20), nullable=False, primary_key=True)
-	password = db.Column(db.String(20), nullable=False)
+	id = db.Column(db.Integer(), nullable=False, primary_key=True)
+	username = db.Column(db.String(), nullable=False)
+	password_hash = db.Column(db.String(), nullable=False)
+
+	def __init__(self, username, password):
+		self.username = username
+		self.set_password(password)
+
+	def set_password(self, password):
+		self.password_hash = generate_password_hash(password)
+
+	def check_password(self, password):
+		return check_password_hash(self.password_hash, password)
+
+@login_manager.user_loader
+def load_user(id: int):
+	return Users.query.get(int(id))
