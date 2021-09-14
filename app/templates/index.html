@@ -4,6 +4,7 @@
 <h1>{% if loggedin %}Hello {{ current_user.username }}!{% endif %} What's for dinner?</h1>
 {% if current_user.is_authenticated %}
 <a href="{{ url_for('logout') }}"><button name="logout-button">Logout</button></a>
+<a href="{{ url_for('cookbook') }}"><button name="cookbook-button">Cookbook</button></a>
 {% elif not current_user.is_authenticated %}
 <a href="{{ url_for('login') }}"><button name="login-button">Login</button></a>
 <a href="{{ url_for('register') }}"><button name="register-button">Register</button></a>

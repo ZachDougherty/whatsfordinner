@@ -18,6 +18,7 @@ CREATE TABLE users (
   id SERIAL,
   username VARCHAR(20) NOT NULL,
   password_hash VARCHAR(20) NOT NULL,
+  recipes INTEGER[],
   PRIMARY KEY (id)
 )
 ;

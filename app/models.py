@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
 
+
 # WTF Forms
 class StringForm(FlaskForm):
 	"Class for single string field form"
@@ -45,6 +46,20 @@ class Recipes(db.Model):
 	host = db.Column(db.String())
 	url = db.Column(db.String(), nullable=False)
 
+	def to_dict(self):
+		return {
+			'id': self.id,
+			'title': self.title,
+			'total_time': self.total_time,  # minutes
+			'yields': self.yields,
+			'ingredients': self.ingredients,  # list
+			'instructions': self.instructions,  # list
+			'image': self.image,  # url to image
+			'host': self.host,  # host website
+			'url': self.url  # original url
+		}
+
+
 class Users(db.Model, UserMixin):
 	"Table for users"
 	__tablename__ = "users"
@@ -53,6 +68,7 @@ class Users(db.Model, UserMixin):
 	id = db.Column(db.Integer(), nullable=False, primary_key=True)
 	username = db.Column(db.String(), nullable=False)
 	password_hash = db.Column(db.String(), nullable=False)
+	recipes = db.Column(db.ARRAY(db.Integer()))
 
 	def __init__(self, username, password):
 		self.username = username

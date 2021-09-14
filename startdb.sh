@@ -14,10 +14,11 @@ joinByChar() {
 
 export fname=$(joinByChar logfile $(date))
 
+# check if database name supplied
 if [ "$#" -ge 1 ]; then
   export db=$1
 else
-  export db=/usr/local/var/postgres
+  export db=/usr/local/var/postgres  # default db location
 fi
 
 pg_ctl start -l logs/$fname -D $db
