@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Cookbook{% endblock %}
 {% block content %}
+<script type="text/javascript">
+  const goToRecipe = id => {
+    var url = `recipe/${id}`
+    location.href = url
+  }
+</script>
 <h1>{{ current_user.username }}'s Cookbook</h1>
 {% if not current_user.recipes %}
 <p>Looks like you don't have any recipes in your cookbook! Check out some recipes that other users have added.</p>
@@ -12,7 +18,7 @@
       {% endfor %}
    {% endif %}
 {% endwith %}
-<br><br>
+<br>
 <div>
 	<b>Enter a url for a recipe</b>
 	<form method="post">
@@ -26,31 +32,14 @@
 </div>
 {% for recipe in recipes %}
 	<div class="recipe-img">
-		<img src="{{ recipe['image'] }}" height="200", width="300" align="top">
+      <img src="{{ recipe['image'] }}" height="200", width="300" align="top">
 	</div>
-
 	<div class="recipe-title">
 		<b>{{ recipe['title'] }}</b>
 	</div>
-	<br>
-	<div class="recipe-ingredients">
-		<b>Ingredients</b>
-		<ul>
-			{% for ing in recipe['ingredients'] %}
-			<li>{{ ing }}</li>
-			{% endfor %}
-		</ul>
-	</div>
-
-	<div class="recipe-instructions">
-		<b>Instructions</b>
-		<ul>
-			{% for instr in recipe['instructions'] %}
-			<li>{{ instr }}</li>
-			{% endfor %}
-		</ul>
-	</div>
-  <br><br>
+  <br>
+  <button name="go-to-recipe" onclick="goToRecipe({{ recipe['id'] }})">See Recipe</button>
+	<br><br>
 {% endfor %}
 
 {% endblock %}

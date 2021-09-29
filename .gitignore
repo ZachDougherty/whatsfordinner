@@ -4,3 +4,8 @@ __pycache__
 app/__pycache__
 startup.md
 database/mongodb
+database
+recipes
+todo
+
+test.sh

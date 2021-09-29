@@ -4,7 +4,8 @@ from flask_login.utils import login_user, logout_user, \
 from recipe_scrapers import WebsiteNotImplementedError
 
 from app import app, db, models
-from app.models import StringForm, LoginForm, RegisterForm, Users, Recipes
+from app.models import StringForm, LoginForm, RegisterForm, Users, \
+					   Recipes
 from app.scrape import get_recipe
 
 import json
@@ -37,27 +38,17 @@ def cookbook():
 		if recipe:
 			if recipe.id not in current_user.recipes:
 				current_user.recipes = current_user.recipes + [recipe.id]
-
 	db.session.commit()
 
-	recipes = [Recipes.query.get(id).to_dict() for id in current_user.recipes][::-1]
+	recipes = [Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None][::-1]
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
-@app.route('/recipe', methods=['POST','GET'])
-def recipe():
+@app.route('/recipe/<id>', methods=['POST','GET'])
+def recipe(id: int):
 	"Display recipe information."
-	url = request.args.get('url')
-	try:
-		recipe = models.Recipes.query.filter_by(url=url).first()
-		recipe_dict = get_recipe(url)
-		if not recipe:
-			recipe = models.Recipes(**recipe_dict)
-			db.session.add(recipe)
-			db.session.commit()
-	except:  # if website is not implemented by recipe_scrapers or url is bad
-		recipe_dict = None
-	finally:
-		return render_template('recipe.html', recipe=recipe_dict)
+	recipe = models.Recipes.query.get(id).to_dict()
+
+	return render_template('recipe.html', recipe=recipe)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -105,12 +96,3 @@ def logout():
 	logout_user()
 	return render_template('index.html', form=StringForm(),
 		loggedin=current_user.is_authenticated)
-
-
-@app.route('/see_user/<username>', methods=['GET'])
-def see_user(username: str):
-	user = Users.query.filter_by(username=username).first()
-	user.recipes = user.recipes + [2]
-	db.session.commit()
-	in_recipes = 1 in user.recipes
-	return f"<p>{user.recipes}: {in_recipes}</p>"
