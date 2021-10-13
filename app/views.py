@@ -39,8 +39,11 @@ def cookbook():
 			if recipe.id not in current_user.recipes:
 				current_user.recipes = current_user.recipes + [recipe.id]
 	db.session.commit()
-
-	recipes = [Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None][::-1]
+	
+	if not current_user.recipes:
+		recipes = []
+	else:
+		recipes = [Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None][::-1]
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
 @app.route('/recipe/<id>', methods=['POST','GET'])
