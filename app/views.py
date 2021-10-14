@@ -79,7 +79,7 @@ def register():
 		password = form.password.data
 		user = Users.query.filter_by(username=username).first()
 		if not user:
-			new_user = Users(username, password)
+			new_user = Users(username, password, [])
 			db.session.add(new_user)
 			db.session.commit()
 			login_user(new_user)
