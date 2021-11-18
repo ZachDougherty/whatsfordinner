@@ -60,14 +60,10 @@ def recipe():
 	"Display recipe information."
 	url = request.args.get('url')
 	try:
-		recipe = models.Recipes.query.filter_by(url=url).first()
 		recipe_dict = get_recipe(url)
-		if not recipe:
-			recipe = models.Recipes(**recipe_dict)
 	except:
 		recipe_dict = None
-	finally:
-		return render_template('recipe.html', recipe=recipe_dict)
+	return render_template('recipe.html', recipe=recipe_dict)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
