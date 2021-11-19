@@ -41,7 +41,7 @@ def cookbook():
 			if recipe.id not in current_user.recipes:
 				current_user.recipes = current_user.recipes + [recipe.id]
 	db.session.commit()
-	
+
 	if not current_user.recipes:
 		recipes = []
 	else:
@@ -49,11 +49,21 @@ def cookbook():
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
 @app.route('/recipe/<id>', methods=['POST','GET'])
-def recipe(id: int):
-	"Display recipe information."
+def recipe_user(id: int):
+	"Display user's recipe information."
 	recipe = models.Recipes.query.get(id).to_dict()
 
 	return render_template('recipe.html', recipe=recipe)
+
+@app.route('/recipe', methods=['POST','GET'])
+def recipe():
+	"Display recipe information."
+	url = request.args.get('url')
+	try:
+		recipe_dict = get_recipe(url)
+	except:
+		recipe_dict = None
+	return render_template('recipe.html', recipe=recipe_dict)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
