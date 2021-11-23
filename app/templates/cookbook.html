@@ -7,6 +7,12 @@
     location.href = url
   }
 </script>
+<script type="text/javascript">
+	const deleteRecipe = id => {
+	  var url = `delete_recipe/${id}`
+	  location.href = url
+	}
+  </script>
 <h1>{{ current_user.username }}'s Cookbook</h1>
 {% if not current_user.recipes %}
 <p>Looks like you don't have any recipes in your cookbook! Check out some recipes that other users have added.</p>
@@ -39,6 +45,7 @@
 	</div>
   <br>
   <button name="go-to-recipe" onclick="goToRecipe({{ recipe['id'] }})">See Recipe</button>
+  <button name="delete-recipe" onclick="deleteRecipe({{ recipe['id'] }})">Delete Recipe</button>
 	<br><br>
 {% endfor %}
 
