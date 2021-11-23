@@ -29,6 +29,11 @@ class RegisterForm(FlaskForm):
 	])
 	submit = SubmitField('submit')
 
+class YesNoForm(FlaskForm):
+	"Form for deciding to take an action or not"
+	agree = SubmitField(label='Yes')
+	disagree = SubmitField(label='No')
+
 
 # Table <> Class definitions
 class Recipes(db.Model):
