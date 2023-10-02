@@ -39,7 +39,7 @@ def cookbook():
 				db.session.add(recipe)
 				db.session.commit()
 				current_user.recipes = current_user.recipes + [recipe.id]
-			# TODO: better error handling
+			# TODO: https://github.com/ZachDougherty/whatsfordinner/issues/7
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
 				flash("Sorry, this website has not been implemented yet.")
 	db.session.commit()
