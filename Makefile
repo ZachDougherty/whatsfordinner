@@ -14,4 +14,4 @@ stopdb:
 	pg_ctl stop -D /usr/local/var/postgres
 
 serve:
-	flask run
+	flask run --host 0.0.0.0 --port 8000

@@ -61,6 +61,7 @@ class Recipes(db.Model):
 	def to_dict(self):
 		return {
 			'id': self.id,
+			'created_at': self.created_at,
 			'title': self.title,
 			'total_time': self.total_time,  # minutes
 			'yields': self.yields,

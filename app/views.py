@@ -35,16 +35,16 @@ def cookbook():
 				recipe_dict["created_at"] = datetime.utcnow()
 				recipe = models.Recipes(**recipe_dict)
 				db.session.add(recipe)
+			# TODO: better error handling
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
 				flash("Sorry, this website has not been implemented yet.")
-		if recipe:
-			if recipe.id not in current_user.recipes:
-				current_user.recipes = current_user.recipes + [recipe.id]
+		if recipe.id not in current_user.recipes:
+			current_user.recipes = current_user.recipes + [recipe.id]
 	db.session.commit()
 
-	recipes = [
+	recipes = sorted([
 		Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None
-	].sort(reverse=True)
+	], key=lambda x: x["created_at"], reverse=True)
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
 @app.route('/recipe/<id>', methods=['POST','GET'])
