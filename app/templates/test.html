@@ -1,0 +1,41 @@
+<form method="post">
+  {{ form.csrf_token }}
+  <fieldset class="form-field">
+      {{ form.title.label }}
+      {{ form.title }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.total_time.label }} (minutes)
+      {{ form.total_time }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.yields.label }}
+      {{ form.yields }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.instructions.label }}
+      {{ form.instructions }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.image.label }}
+      {{ form.image }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.ingredients.label }}
+      {{ form.ingredients }}
+  </fieldset>
+
+  <fieldset class="form-field">
+      {{ form.url.label }}
+      {{ form.url }}
+  </fieldset>
+
+{{ form.submit }}
+</form>
+
+{{ data }}

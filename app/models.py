@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, \
+					IntegerField
 from wtforms.validators import DataRequired, Length
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -34,6 +35,16 @@ class YesNoForm(FlaskForm):
 	agree = SubmitField(label='Yes')
 	disagree = SubmitField(label='No')
 
+class RecipeForm(FlaskForm):
+	title = StringField('title', validators=[DataRequired()])
+	total_time = IntegerField('total_time', default=None)
+	yields = StringField('yields', default=None)
+	ingredients = StringField('ingredients', validators=[DataRequired()])
+	instructions = StringField('instructions', validators=[DataRequired()])
+	image = StringField('image', default=None)
+	host = StringField('host', default=None)
+	url = StringField('url', default='')  # need to decide if user recipes should be split from online
+	submit = SubmitField('submit')
 
 # Table <> Class definitions
 class Recipes(db.Model):
@@ -42,6 +53,7 @@ class Recipes(db.Model):
 	__table_args__ = {"schema": "public"}
 
 	id = db.Column(db.Integer(), nullable=False, primary_key=True)
+	created_at = db.Column(db.DateTime(), nullable=False)
 	title = db.Column(db.String(), nullable=False)
 	total_time = db.Column(db.Integer())
 	yields = db.Column(db.String())
@@ -54,6 +66,7 @@ class Recipes(db.Model):
 	def to_dict(self):
 		return {
 			'id': self.id,
+			'created_at': self.created_at,
 			'title': self.title,
 			'total_time': self.total_time,  # minutes
 			'yields': self.yields,
@@ -78,6 +91,7 @@ class Users(db.Model, UserMixin):
 	def __init__(self, username, password):
 		self.username = username
 		self.set_password(password)
+		self.recipes = []
 
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
