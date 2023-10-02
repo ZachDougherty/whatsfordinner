@@ -2,10 +2,15 @@ logs
 .env
 __pycache__
 app/__pycache__
-startup.md
-database/mongodb
-database
-recipes
 todo
+.vscode/launch.json
 
+# db
+database/mongodb
+database/schema.json
+
+# scripts
 test.sh
+
+# data
+recipes
