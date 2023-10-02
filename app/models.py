@@ -30,6 +30,11 @@ class RegisterForm(FlaskForm):
 	])
 	submit = SubmitField('submit')
 
+class YesNoForm(FlaskForm):
+	"Form for deciding to take an action or not"
+	agree = SubmitField(label='Yes')
+	disagree = SubmitField(label='No')
+
 class RecipeForm(FlaskForm):
 	title = StringField('title', validators=[DataRequired()])
 	total_time = IntegerField('total_time', default=None)

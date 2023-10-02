@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if loggedin %}
+<a href="{{ url_for('cookbook') }}"><button name="cookbook-button">Cookbook</button></a>
+{% endif %}
+<h1>{{ recipe['title'] }}</h1>
+<div class="recipe-img">
+  <img src="{{ recipe['image'] }}" height="200", width="300" align="top">
+</div>
+<br>
+
+<div>
+  <form method="POST">
+    {{ form.csrf_token }}
+    <b>Are you sure you want to delete this recipe?</b>
+    <br>
+    {{ form.agree }}
+    {{ form.disagree }}
+  </form>
+</div>
+
+{% endblock %}

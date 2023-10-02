@@ -5,6 +5,8 @@ from flask_login.utils import login_user, logout_user, \
 from recipe_scrapers import WebsiteNotImplementedError
 
 from app import app, db, models
+from app.models import StringForm, LoginForm, RegisterForm, YesNoForm, \
+					   Users, Recipes, RecipeForm
 from app.models import StringForm, LoginForm, RegisterForm, Users, \
 					   Recipes, RecipeForm
 from app.scrape import get_recipe
@@ -35,16 +37,17 @@ def cookbook():
 				recipe_dict["created_at"] = datetime.utcnow()
 				recipe = models.Recipes(**recipe_dict)
 				db.session.add(recipe)
+				db.session.commit()
+				current_user.recipes = current_user.recipes + [recipe.id]
 			# TODO: better error handling
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
 				flash("Sorry, this website has not been implemented yet.")
-		if recipe.id not in current_user.recipes:
-			current_user.recipes = current_user.recipes + [recipe.id]
 	db.session.commit()
 
 	recipes = sorted([
 		Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None
 	], key=lambda x: x["created_at"], reverse=True)
+  
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
 @app.route('/recipe/<id>', methods=['POST','GET'])
@@ -53,6 +56,24 @@ def recipe_user(id: int):
 	recipe = models.Recipes.query.get(id).to_dict()
 
 	return render_template('recipe.html', recipe=recipe)
+
+@app.route('/delete_recipe/<id>', methods=['POST','GET'])
+def delete_recipe(id: int):
+	"Decide whether to delete a recipe or not."
+	recipe = models.Recipes.query.get(id)
+
+	form = YesNoForm()
+	if form.validate_on_submit():
+		if form.agree.data:
+			recipes_copy = current_user.recipes.copy()
+			recipes_copy.remove(recipe.id)
+			current_user.recipes = recipes_copy
+			db.session.commit()
+			return redirect(url_for('cookbook'))
+		if form.disagree.data:
+			return redirect(url_for('cookbook'))
+
+	return render_template('delete_recipe.html', form=form, recipe=recipe.to_dict())
 
 @app.route('/recipe', methods=['POST','GET'])
 def recipe():
