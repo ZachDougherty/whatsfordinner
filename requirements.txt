@@ -1,6 +1,5 @@
 appnope==0.1.2
 backcall==0.2.0
-beautifulsoup4 @ file:///home/linux1/recipes/ci/beautifulsoup4_1610988766420/work
 bs4==0.0.1
 certifi==2021.5.30
 charset-normalizer==2.0.4
@@ -18,7 +17,6 @@ prompt-toolkit==3.0.19
 ptyprocess==0.7.0
 Pygments==2.9.0
 requests==2.26.0
-soupsieve @ file:///tmp/build/80754af9/soupsieve_1616183228191/work
 toml==0.10.2
 traitlets==5.0.5
 urllib3==1.26.6

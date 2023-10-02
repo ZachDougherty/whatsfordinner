@@ -31,6 +31,4 @@ if [ "$#" -eq 2 ]; then
     echo $2 > ~/.pgpass
     echo "Created ~/.pgpass"
   fi
-  psql -d $(echo $2 | cut -f 3 -d ':') -f ./database/create_tables.sql
-  echo "Created tables."
 fi

@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import redirect, url_for, render_template, request, flash
 from flask_login.utils import login_user, logout_user, \
 							  current_user, login_required
@@ -5,7 +6,7 @@ from recipe_scrapers import WebsiteNotImplementedError
 
 from app import app, db, models
 from app.models import StringForm, LoginForm, RegisterForm, Users, \
-					   Recipes
+					   Recipes, RecipeForm
 from app.scrape import get_recipe
 
 import json
@@ -31,21 +32,19 @@ def cookbook():
 		if not recipe:
 			try:
 				recipe_dict = get_recipe(url)
+				recipe_dict["created_at"] = datetime.utcnow()
 				recipe = models.Recipes(**recipe_dict)
 				db.session.add(recipe)
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
 				flash("Sorry, this website has not been implemented yet.")
-		else:
-			if not current_user.recipes:
-				current_user.recipes = []
+		if recipe:
 			if recipe.id not in current_user.recipes:
 				current_user.recipes = current_user.recipes + [recipe.id]
 	db.session.commit()
 
-	if not current_user.recipes:
-		recipes = []
-	else:
-		recipes = [Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None][::-1]
+	recipes = [
+		Recipes.query.get(id).to_dict() for id in current_user.recipes if id is not None
+	].sort(reverse=True)
 	return render_template('cookbook.html', form=form, recipes=recipes)
 
 @app.route('/recipe/<id>', methods=['POST','GET'])
@@ -94,7 +93,8 @@ def register():
 		password = form.password.data
 		user = Users.query.filter_by(username=username).first()
 		if not user:
-			new_user = Users(username, password, [])
+			# allow user to preselect recipes from the catalog
+			new_user = Users(username, password)
 			db.session.add(new_user)
 			db.session.commit()
 			login_user(new_user)
@@ -111,3 +111,13 @@ def logout():
 	logout_user()
 	return render_template('index.html', form=StringForm(),
 		loggedin=current_user.is_authenticated)
+
+
+@app.route('/test', methods=['GET','POST'])
+def see_user():
+	form = RecipeForm()
+	data = ''
+	if form.validate_on_submit():
+		data = form.data
+
+	return render_template('test.html', form=form, data=data)
