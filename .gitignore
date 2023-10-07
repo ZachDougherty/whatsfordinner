@@ -7,5 +7,6 @@ database/mongodb
 database
 recipes
 todo
+launch.json
 
 test.sh
