@@ -5,10 +5,8 @@ from flask_login.utils import login_user, logout_user, \
 from recipe_scrapers import WebsiteNotImplementedError
 
 from app import app, db, models
-from app.models import StringForm, LoginForm, RegisterForm, YesNoForm, \
+from app.models import URLStringForm, LoginForm, RegisterForm, YesNoForm, \
 					   Users, Recipes, RecipeForm
-from app.models import StringForm, LoginForm, RegisterForm, Users, \
-					   Recipes, RecipeForm
 from app.scrape import get_recipe
 
 import json
@@ -17,7 +15,7 @@ import json
 @app.route('/index', methods=['GET','POST'])
 def index():
 	"Home page for Whatsfordinner"
-	form = StringForm()
+	form = URLStringForm()
 	if form.validate_on_submit():
 		url = str(form.field.data)
 		return redirect(url_for('recipe', url=url))
@@ -27,7 +25,7 @@ def index():
 @login_required
 def cookbook():
 	"Contains all user recipes"
-	form = StringForm()
+	form = URLStringForm()
 	if form.validate_on_submit():
 		url = form.field.data
 		recipe = models.Recipes.query.filter_by(url=url).first()
@@ -41,7 +39,7 @@ def cookbook():
 				current_user.recipes = current_user.recipes + [recipe.id]
 			# TODO: https://github.com/ZachDougherty/whatsfordinner/issues/7
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
-				flash("Sorry, this website has not been implemented yet.")
+				flash("Sorry, a scraper for this website has not been implemented yet.")
 	db.session.commit()
 
 	recipes = sorted([
@@ -99,11 +97,9 @@ def login():
 			flash("Incorrect password")
 		else:
 			login_user(user)
-			return render_template('index.html', form=StringForm(),
-				loggedin=current_user.is_authenticated)
+			return redirect(url_for("index"))
 
-	return render_template('login.html', form=form,
-						   loggedin=current_user.is_authenticated)
+	return render_template('login.html', form=form)
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -119,9 +115,8 @@ def register():
 			db.session.add(new_user)
 			db.session.commit()
 			login_user(new_user)
-			return render_template('index.html', form=StringForm(),
-				loggedin=current_user.is_authenticated)
-		flash("User already exists. ")
+			return redirect(url_for("index"))
+		flash("User already exists.")
 
 	return render_template('register.html', form=form)
 
@@ -130,8 +125,7 @@ def register():
 def logout():
 	"Logout page"
 	logout_user()
-	return render_template('index.html', form=StringForm(),
-		loggedin=current_user.is_authenticated)
+	return redirect(url_for("index"))
 
 
 @app.route('/test', methods=['GET','POST'])

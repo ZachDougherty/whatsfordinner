@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if loggedin %}
+{% if current_user.is_authenticated %}
 <a href="{{ url_for('cookbook') }}"><button name="cookbook-button">Cookbook</button></a>
 {% endif %}
 <h1>{{ recipe['title'] }}</h1>

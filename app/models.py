@@ -10,7 +10,7 @@ from app import db, login_manager
 
 
 # WTF Forms
-class StringForm(FlaskForm):
+class URLStringForm(FlaskForm):
 	"Class for single string field form"
 	field = StringField('url', validators=[DataRequired()])
 	submit = SubmitField('submit')
