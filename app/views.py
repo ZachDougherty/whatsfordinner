@@ -37,7 +37,7 @@ def cookbook():
 				db.session.add(recipe)
 				db.session.commit()
 				current_user.recipes = current_user.recipes + [recipe.id]
-			# TODO: better error handling
+			# TODO: https://github.com/ZachDougherty/whatsfordinner/issues/7
 			except Exception as e:  # if website is not implemented by recipe_scrapers or url is bad
 				flash("Sorry, a scraper for this website has not been implemented yet.")
 	db.session.commit()
@@ -110,7 +110,7 @@ def register():
 		password = form.password.data
 		user = Users.query.filter_by(username=username).first()
 		if not user:
-			# TODO: allow user to preselect recipes from the catalog
+			# TODO: https://github.com/ZachDougherty/whatsfordinner/issues/9
 			new_user = Users(username, password)
 			db.session.add(new_user)
 			db.session.commit()

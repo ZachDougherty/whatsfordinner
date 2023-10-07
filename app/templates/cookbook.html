@@ -26,6 +26,7 @@
 		</div>
 	<br>
 	<button name="go-to-recipe" onclick="goToRecipe({{ recipe['id'] }})">See Recipe</button>
+	<button name="delete-recipe" onclick="deleteRecipe({{ recipe['id'] }})">Delete Recipe</button>
 		<br><br>
 	{% endfor %}
 {% endif %}
